@@ -2,9 +2,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import axiosInstance from '../axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 const NewEmail = () =>
 {
+    const navigate = useNavigate()
     const [selectedFile, setSelectedFile] = useState(null);
 
     const handleFileChange = (e) =>
@@ -19,11 +21,8 @@ const NewEmail = () =>
         {
             if (selectedFile)
             {
-                console.log(selectedFile)
                 const formData = new FormData();
                 formData.append('excelFile', selectedFile);
-
-                // Replace 'YOUR_API_ENDPOINT' with the actual endpoint for file upload
                 const response = await axiosInstance.post('send-email', formData,
                     {
                         headers: { 'Content-Type': 'multipart/form-data' }
@@ -31,14 +30,15 @@ const NewEmail = () =>
 
                 if (response.status === 200)
                 {
+                    navigate('/')
                     console.log('File uploaded successfully.');
                 } else
                 {
-                    console.error('File upload failed.');
+                    alert('File upload failed.');
                 }
             } else
             {
-                console.error('No file selected.');
+                alert('No file selected.');
             }
         } catch (error)
         {
